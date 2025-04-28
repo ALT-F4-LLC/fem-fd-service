@@ -1,0 +1,17 @@
+module goalzi
+
+go 1.23
+
+toolchain go1.23.1
+
+require (
+	github.com/gorilla/sessions v1.4.0
+	github.com/lib/pq v1.10.9
+	golang.org/x/oauth2 v0.23.0
+	gopkg.in/yaml.v2 v2.4.0
+)
+
+require (
+	cloud.google.com/go/compute/metadata v0.3.0 // indirect
+	github.com/gorilla/securecookie v1.1.2 // indirect
+)

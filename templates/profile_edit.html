@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - goalzi</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/" class="logo-link">goalzi (beta)</a>
+            </div>
+            <div class="auth-buttons">
+                <a href="/auth/logout">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Edit Your Profile</h1>
+        {{if .ErrorMessage}}
+            <p class="error-message">{{.ErrorMessage}}</p>
+        {{end}}
+        <form action="/profile/edit" method="POST" class="edit-profile-form">
+            <div class="form-group">
+                <label for="display_name">Display Name:</label>
+                <input type="text" id="display_name" name="display_name" value="{{.User.DisplayName}}">
+                <p class="field-description">This is the name that will be displayed on your profile and posts.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" value="{{.User.Username}}" required>
+                <p class="field-description">This will be your public profile URL: /users/your-username</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="bio">Bio:</label>
+                <textarea id="bio" name="bio" rows="3">{{if .User.Bio.Valid}}{{.User.Bio.String}}{{end}}</textarea>
+                <p class="field-description">A short description about yourself (max 160 characters)</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="bio_link">Bio Link:</label>
+                <input type="url" id="bio_link" name="bio_link" value="{{if .User.BioLink.Valid}}{{.User.BioLink.String}}{{end}}">
+                <p class="field-description">A link to your website or social media profile</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="life_aspirations">Life Aspirations:</label>
+                <textarea id="life_aspirations" name="life_aspirations" rows="5">{{.User.LifeAspirations.String}}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="things_i_like_to_do">Things I Like to Do:</label>
+                <textarea id="things_i_like_to_do" name="things_i_like_to_do" rows="5">{{.User.ThingsILikeToDo.String}}</textarea>
+            </div>
+            
+            <button type="submit" class="submit-button">Save Changes</button>
+        </form>
+    </main>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

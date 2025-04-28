@@ -1,3 +1,13 @@
+# Configuration file with secrets
+config.yaml
+
+# IDE-specific files
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
 # If you prefer the allow list template instead of the deny list, see community template:
 # https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
 #
@@ -23,3 +33,4 @@ go.work.sum
 
 # env file
 .env
+

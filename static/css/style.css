@@ -1,0 +1,700 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .logo-link {
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .auth-buttons a {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 1rem;
+    }
+}
+
+main {
+    max-width: 800px;
+    margin: 2rem auto 0;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    margin-bottom: 1rem;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+        margin-bottom: 1rem;
+    }
+}
+
+form {
+    margin-bottom: 2rem;
+}
+
+input[type="text"],
+input[type="url"],
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button,
+.button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+}
+
+.error-message {
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+.content-box,
+.update-item {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.update-item {
+    .update-content {
+        flex-grow: 1;
+        margin-right: 1rem;
+    }
+
+    .update-actions {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+}
+
+.cheer-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+
+    .cheer-count {
+        font-weight: bold;
+        margin-right: 0.5rem;
+        font-size: 1.1em;
+    }
+
+    .cheer-button {
+        display: flex;
+        align-items: center;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 0.875rem;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+
+        &.uncheers {
+            background-color: #6c757d;
+
+            &:hover {
+                background-color: #5a6268;
+            }
+        }
+
+        svg {
+            margin-right: 0.25rem;
+        }
+    }
+}
+
+#follow-button,
+#unfollow-button {
+    display: flex;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+
+    svg {
+        margin-right: 0.25rem;
+    }
+}
+
+.hero {
+    background-image: url('https://cdn.pixabay.com/photo/2016/02/04/09/01/summit-victory-1178780_1280.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+
+    .hero-content {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 2rem;
+        border-radius: 10px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 0.8rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #0056b3;
+        text-decoration: none;
+    }
+
+    &.google-signin-button {
+        font-size: 16px;
+        padding: 12px 24px;
+        background-color: #4285F4;
+        color: white;
+        border: none;
+
+        &:hover {
+            background-color: #357ae8;
+        }
+
+        .google-icon {
+            margin-right: 12px;
+        }
+
+        span {
+            color: white;
+        }
+    }
+}
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+
+    &.large {
+        width: 100px;
+        height: 100px;
+    }
+
+    &.medium {
+        width: 60px;
+        height: 60px;
+    }
+
+    &.small {
+        width: 30px;
+        height: 30px;
+        transition: transform 0.2s ease-in-out;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+}
+
+.follower-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 1rem;
+
+    a {
+        text-decoration: none;
+    }
+}
+
+.follower-info {
+    margin-bottom: 1rem;
+
+    p {
+        margin-bottom: 0.5rem;
+    }
+}
+
+.bio,
+.bio-link {
+    margin-bottom: 0.5rem;
+}
+
+.bio-link {
+    a {
+        display: inline-flex;
+        align-items: center;
+        color: #007bff;
+        text-decoration: none;
+        word-break: break-all;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        svg {
+            margin-right: 0.25rem;
+        }
+    }
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.profile-info {
+    margin-left: 2rem;
+
+    h1 {
+        margin-bottom: 0;
+    }
+
+    p {
+        margin: 0.5rem 0;
+    }
+
+    .username,
+    .email {
+        color: #666;
+    }
+
+    .email {
+        margin-bottom: 0.5rem;
+    }
+
+    #follow-button,
+    #unfollow-button {
+        margin-top: 0.5rem;
+    }
+}
+
+.follow-stats {
+    margin-bottom: 1rem;
+
+    span {
+        margin-right: 1rem;
+    }
+}
+
+.edit-profile-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #0056b3;
+        text-decoration: none;
+    }
+}
+
+.edit-delete-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.edit-update-link {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.875rem;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.delete-update-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #5a6268;
+    }
+}
+
+.delete-update-form {
+    margin: 0;
+}
+
+.recent-followers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 1rem;
+
+    a {
+        text-decoration: none;
+    }
+}
+
+.home-recently-joined,
+.home-recent-updates {
+    margin-bottom: 2rem;
+
+    h2 {
+        text-align: center;
+    }
+}
+
+.user-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.user-item {
+    text-decoration: none;
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.comments-container {
+    margin-top: 2rem;
+}
+
+.comment-form,
+.reply-form {
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+    }
+
+    button {
+        margin-top: 10px;
+    }
+}
+
+.comment-form textarea {
+    min-height: 100px;
+}
+
+.reply-form textarea {
+    min-height: 80px;
+}
+
+.comments-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.comment-item, .update-item {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e1e1e1;
+    padding-bottom: 1rem;
+
+    .comment-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .comment-info {
+        margin-left: 0.5rem;
+    }
+
+    .comment-date {
+        font-size: 0.8rem;
+        color: #666;
+    }
+
+    .comment-content {
+        margin-bottom: 0.5rem;
+    }
+
+    .comment-actions {
+        margin-bottom: 0.5rem;
+
+        .add-comment-link {
+            display: inline-flex;
+            align-items: center;
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.875rem;
+            text-decoration: none;
+
+            &:hover {
+                background-color: #5a6268;
+                text-decoration: none;
+            }
+
+            svg {
+                margin-right: 0.25rem;
+            }
+        }
+    }
+
+    .reply-form {
+        margin-left: 2rem;
+        margin-top: 0.5rem;
+    }
+
+    .replies-list {
+        list-style-type: none;
+        padding-left: 2rem;
+        margin-top: 0.5rem;
+    }
+
+    .reply-item {
+        margin-bottom: 0.5rem;
+    }
+}
+
+.google-signin-button {
+    display: inline-flex;
+    align-items: center;
+    background-color: #fff;
+    color: #757575;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 12px;
+    text-decoration: none;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+
+    &:hover {
+        background-color: #f7f8f8;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.16), 0 2px 4px rgba(0,0,0,0.23);
+    }
+
+    .google-icon {
+        margin-right: 8px;
+    }
+
+    span {
+        color: #757575;
+    }
+}
+
+.features {
+    margin: 1.5rem 0;
+}
+
+.feature-list {
+    list-style-type: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+
+    .feature-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 0.75rem;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+            min-width: 1.5rem;
+            text-align: center;
+        }
+
+        .feature-text {
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+    }
+}
+
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: inherit;
+    margin: 0;
+}
+
+textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+    overflow: hidden;
+}
+
+@media (max-width: 600px) {
+    .feature-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+.footer-links {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.footer-link {
+    color: #777;
+    font-size: 0.8em;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.footer-link:hover {
+    text-decoration: underline;
+}
+
+.admin-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.ban-button {
+    background-color: #dc3545;
+    color: white;
+}
+
+.ban-button:hover {
+    background-color: #c82333;
+}
+
+.unban-button {
+    background-color: #28a745;
+    color: white;
+}
+
+.unban-button:hover {
+    background-color: #218838;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc;
+}

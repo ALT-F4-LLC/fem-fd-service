@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Aspiration Update - goalzi</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="content-wrapper">
+        <header>
+            <nav>
+                <div class="logo">
+                    <a href="/" class="logo-link">goalzi (beta)</a>
+                </div>
+                <div class="auth-buttons">
+                    <a href="/profile" class="profile-button">Back to Profile</a>
+                    <a href="/auth/logout" class="logout-button">Logout</a>
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <h2>Edit Aspiration Update</h2>
+            <form action="/aspiration-update" method="POST">
+                <input type="hidden" name="update_id" value="{{.UpdateID}}">
+                <textarea name="content" rows="4" required>{{.Content}}</textarea>
+                <button type="submit">Update</button>
+            </form>
+        </main>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

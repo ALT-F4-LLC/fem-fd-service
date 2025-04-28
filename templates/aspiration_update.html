@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aspiration Update - goalzi</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/" class="logo-link">goalzi (beta)</a>
+            </div>
+            <div class="auth-buttons">
+                {{if .IsAuthenticated}}
+                    <a href="/profile">My Profile</a>
+                    <a href="/auth/logout">Logout</a>
+                {{else}}
+                    <a href="/auth/google/login">Login</a>
+                {{end}}
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="update-container">
+            <div class="update-item">
+                <div class="update-header">
+                    <a href="/users/{{.Update.Username}}" class="user-link">
+                      <img src="{{.Update.ProfileImageURL.String}}" alt="{{.Update.DisplayName}}'s profile" class="profile-image medium">
+                    </a>
+                    <div class="update-info">
+                        <a href="/users/{{.Update.Username}}" class="user-link">
+                            <span class="display-name">{{.Update.DisplayName}}</span>
+                            <span class="username">@{{.Update.Username}}</span>
+                        </a>
+                        <span class="update-date">{{.Update.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+                    </div>
+                </div>
+                <div class="update-content">
+                    <p>{{.Update.Content}}</p>
+                </div>
+                <div class="update-actions">
+                    <div class="cheer-section">
+                        {{if gt .Update.LikeCount 0}}
+                            <span class="cheer-count">{{.Update.LikeCount}} Cheers</span>
+                        {{end}}
+                        {{if not .Update.IsOwnPost}}
+                            {{if .Update.Liked}}
+                                <button class="cheer-button uncheers" data-update-id="{{.Update.ID}}">
+                                    🎉 Uncheer
+                                </button>
+                            {{else}}
+                                <button class="cheer-button cheers" data-update-id="{{.Update.ID}}">
+                                    🎉 Cheer
+                                </button>
+                            {{end}}
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comments-container">
+            <h2>Comments</h2>
+            {{if .IsAuthenticated}}
+                <form action="/comment/add" method="POST" class="comment-form" id="add-comment">
+                    <input type="hidden" name="update_id" value="{{.Update.ID}}">
+                    <textarea name="content" rows="3" required placeholder="Add a comment..."></textarea>
+                    <button type="submit">Add Comment</button>
+                </form>
+            {{else}}
+                <p>Please <a href="/auth/google/login">login</a> to add a comment.</p>
+            {{end}}
+
+            <ul class="comments-list" id="comments">
+                {{range .Comments}}
+                    {{template "comment" (commentContext $ .)}}
+                {{end}}
+            </ul>
+        </div>
+    </main>
+
+    <script src="/static/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.reply-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const commentItem = button.closest('.comment-item');
+                    const replyForm = commentItem.querySelector('.reply-form');
+                    replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+{{define "comment"}}
+    <li class="comment-item">
+        <p>Comment ID: {{.Comment.ID}}, Parent ID: {{if .Comment.ParentID.Valid}}{{.Comment.ParentID.Int64}}{{else}}None{{end}}</p>
+        
+        <div class="comment-header">
+            <img src="{{.Comment.ProfileImageURL}}" alt="{{.Comment.DisplayName}}'s profile" class="profile-image small">
+            <div class="comment-info">
+                <a href="/users/{{.Comment.Username}}" class="user-link">
+                    <span class="display-name">{{.Comment.DisplayName}}</span>
+                    <span class="username">@{{.Comment.Username}}</span>
+                </a>
+                <span class="comment-date">{{.Comment.CreatedAt.Format "Jan 02, 2006 15:04"}}</span>
+            </div>
+        </div>
+        <div class="comment-content">
+            <p>{{.Comment.Content}}</p>
+        </div>
+        {{if .IsAuthenticated}}
+            <div class="comment-actions">
+                <button class="reply-button" data-comment-id="{{.Comment.ID}}">Reply</button>
+            </div>
+            <form action="/comment/add" method="POST" class="reply-form" style="display: none;">
+                <input type="hidden" name="update_id" value="{{.UpdateID}}">
+                <input type="hidden" name="parent_id" value="{{.Comment.ID}}">
+                <textarea name="content" rows="2" required placeholder="Add a reply..."></textarea>
+                <button type="submit">Reply</button>
+            </form>
+        {{end}}
+        {{if .Comment.Replies}}
+            <ul class="replies-list">
+                {{range .Comment.Replies}}
+                    {{template "comment" (commentContext $.Root .)}}
+                {{end}}
+            </ul>
+        {{end}}
+    </li>
+{{end}}
