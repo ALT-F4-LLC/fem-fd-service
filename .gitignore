@@ -1,5 +1,5 @@
 # Configuration file with secrets
-config.yaml
+.env
 
 # IDE-specific files
 .vscode/

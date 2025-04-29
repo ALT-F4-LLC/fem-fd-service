@@ -50,7 +50,7 @@ A platform for setting and sharing life goals and aspirations.
 ### Database Setup
 
 ```bash
-docker-compose exec db psql -U goalzi_user -d goalzi_db
+docker compose exec postgres psql -U postgres -d postgres
 ```
 
 ```sql
@@ -68,17 +68,20 @@ CREATE TABLE users (
     is_logged_in BOOLEAN DEFAULT FALSE,
     is_banned BOOLEAN DEFAULT FALSE
 );
+
 CREATE TABLE administrators (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     username VARCHAR(255) UNIQUE NOT NULL
 );
+
 CREATE TABLE aspiration_updates (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
     content TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE likes (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
@@ -86,12 +89,14 @@ CREATE TABLE likes (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (user_id, update_id)
 );
+
 CREATE TABLE followers (
     follower_id INTEGER REFERENCES users(id),
     followed_id INTEGER REFERENCES users(id),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (follower_id, followed_id)
 );
+
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
     update_id INTEGER REFERENCES aspiration_updates(id),

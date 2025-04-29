@@ -9,20 +9,18 @@ import (
 	"io"
 	"log"
 	"math/rand"
+	"mime"
 	"net/http"
 	"os"
-	"strings"
-	"time"
-
-	"mime"
 	"path/filepath"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gorilla/sessions"
 	_ "github.com/lib/pq"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
-	"gopkg.in/yaml.v2"
 )
 
 var (
@@ -30,14 +28,6 @@ var (
 	store        *sessions.CookieStore
 	oauth2Config *oauth2.Config
 )
-
-type Configuration struct {
-	GoogleClientID     string `yaml:"google_client_id"`
-	GoogleClientSecret string `yaml:"google_client_secret"`
-	RedirectURL        string `yaml:"redirect_url"`
-}
-
-var config Configuration
 
 // Custom types
 type contextKey string
@@ -135,21 +125,19 @@ func main() {
 }
 
 func loadConfig() {
-	file, err := os.ReadFile("config.yaml")
-	if err != nil {
-		log.Fatal("Error reading config file:", err)
-	}
+	googleClientID := os.Getenv("GOOGLE_CLIENT_ID")
+	googleClientSecret := os.Getenv("GOOGLE_CLIENT_SECRET")
+	googleRedirectURL := os.Getenv("GOOGLE_REDIRECT_URL")
 
-	err = yaml.Unmarshal(file, &config)
-	if err != nil {
-		log.Fatal("Error parsing config file:", err)
+	if googleClientID == "" || googleClientSecret == "" || googleRedirectURL == "" {
+		log.Fatal("GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REDIRECT_URL environment variables must be set")
 	}
 
 	// Initialize oauth2Config here
 	oauth2Config = &oauth2.Config{
-		ClientID:     config.GoogleClientID,
-		ClientSecret: config.GoogleClientSecret,
-		RedirectURL:  config.RedirectURL,
+		ClientID:     googleClientID,
+		ClientSecret: googleClientSecret,
+		RedirectURL:  googleRedirectURL,
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.email",
 			"https://www.googleapis.com/auth/userinfo.profile",
@@ -159,8 +147,13 @@ func loadConfig() {
 }
 
 func connectDB() {
+	postgresUrl := os.Getenv("POSTGRES_URL")
+	if postgresUrl == "" {
+		log.Fatal("POSTGRES_URL environment variable must be set")
+	}
+
 	var err error
-	db, err = sql.Open("postgres", "host=localhost port=5433 user=goalzi_user password=goalzi_password dbname=goalzi_db sslmode=disable")
+	db, err = sql.Open("postgres", postgresUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -169,14 +162,23 @@ func connectDB() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	log.Println("Successfully connected to the database")
 }
 
 func initializeOAuth() {
+	googleClientID := os.Getenv("GOOGLE_CLIENT_ID")
+	googleClientSecret := os.Getenv("GOOGLE_CLIENT_SECRET")
+	googleRedirectURL := os.Getenv("GOOGLE_REDIRECT_URL")
+
+	if googleClientID == "" || googleClientSecret == "" || googleRedirectURL == "" {
+		log.Fatal("GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REDIRECT_URL environment variables must be set")
+	}
+
 	oauth2Config = &oauth2.Config{
-		ClientID:     config.GoogleClientID,
-		ClientSecret: config.GoogleClientSecret,
-		RedirectURL:  config.RedirectURL,
+		ClientID:     googleClientID,
+		ClientSecret: googleClientSecret,
+		RedirectURL:  googleRedirectURL,
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.email",
 			"https://www.googleapis.com/auth/userinfo.profile",
@@ -314,7 +316,8 @@ func fetchRecentUsers() ([]struct {
 	Username        string
 	DisplayName     string
 	ProfileImageURL string
-}, error) {
+}, error,
+) {
 	rows, err := db.Query(`
 		SELECT id, COALESCE(username, ''), COALESCE(display_name, ''), COALESCE(profile_image_url, '')
 		FROM users
