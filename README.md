@@ -24,16 +24,10 @@ A platform for setting and sharing life goals and aspirations.
 - PostgreSQL (if not using Docker)
 - Google Cloud Console account for OAuth2 setup
 
-### Development Environment
-
-1. Install Go (https://golang.org/doc/install)
-2. Start the server: `go run main.go`
-
 ### Docker Setup
 
 1. Ensure Docker and Docker Compose are installed
-2. Run `docker-compose up -d` to start both the PostgreSQL database
-3. Access the application at `http://localhost:8080`
+2. Run `docker-compose up --detach` to start both the PostgreSQL database
 
 ### Google OAuth2 Setup
 
@@ -46,6 +40,7 @@ A platform for setting and sharing life goals and aspirations.
 7. Set the name for your OAuth 2.0 client
 8. Add http://localhost:8080/auth/google/callback to "Authorized redirect URIs"
 9. Click "Create" and note down the Client ID and Client Secret
+10. Keep note of credentials to use in `.env` file later
 
 ### Database Setup
 
@@ -115,6 +110,14 @@ SELECT email, username
 FROM users
 WHERE email = 'user@example.com';
 ```
+
+### Development Environment
+
+1. Copy `.env.example` to create new `.env` file
+2. Update `.env` file with OAuth credentials
+3. Source `.env` with `source .env`
+4. Start server with `go run main.go`
+5. Navigate to http://localhost:8080
 
 ## License
 
