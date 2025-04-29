@@ -19,7 +19,7 @@ A platform for setting and sharing life goals and aspirations.
 
 ### Prerequisites
 
-- Go 1.16 or later
+- Go 1.24.2 or later
 - Docker and Docker Compose
 - PostgreSQL (if not using Docker)
 - Google Cloud Console account for OAuth2 setup
