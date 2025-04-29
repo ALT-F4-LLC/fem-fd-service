@@ -1,6 +1,3 @@
-# Configuration file with secrets
-.env
-
 # IDE-specific files
 .vscode/
 
@@ -33,4 +30,3 @@ go.work.sum
 
 # env file
 .env
-
