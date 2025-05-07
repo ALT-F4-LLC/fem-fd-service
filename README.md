@@ -24,11 +24,6 @@ A platform for setting and sharing life goals and aspirations.
 - PostgreSQL (if not using Docker)
 - Google Cloud Console account for OAuth2 setup
 
-### Docker Setup
-
-1. Ensure Docker and Docker Compose are installed
-2. Run `docker-compose up --detach` to start both the PostgreSQL database
-
 ### Google OAuth2 Setup
 
 1. Go to the Google Cloud Console: https://console.cloud.google.com/
@@ -42,67 +37,17 @@ A platform for setting and sharing life goals and aspirations.
 9. Click "Create" and note down the Client ID and Client Secret
 10. Keep note of credentials to use in `.env` file later
 
-### Database Setup
+### Docker Setup
+
+To run local services (postgres, etc) and migrations:
 
 ```bash
-docker compose exec postgres psql -U postgres -d postgres
+make down # clears environment
+make up # starts services
+make migrate # runs SQL script
 ```
 
-```sql
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    bio TEXT,
-    bio_link VARCHAR(255),
-    username VARCHAR(50) UNIQUE NOT NULL,
-    display_name VARCHAR(100),
-    profile_image_url TEXT,
-    life_aspirations TEXT,
-    things_i_like_to_do TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    is_logged_in BOOLEAN DEFAULT FALSE,
-    is_banned BOOLEAN DEFAULT FALSE
-);
-
-CREATE TABLE administrators (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    username VARCHAR(255) UNIQUE NOT NULL
-);
-
-CREATE TABLE aspiration_updates (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    content TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE likes (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users(id),
-    update_id INTEGER REFERENCES aspiration_updates(id),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (user_id, update_id)
-);
-
-CREATE TABLE followers (
-    follower_id INTEGER REFERENCES users(id),
-    followed_id INTEGER REFERENCES users(id),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (follower_id, followed_id)
-);
-
-CREATE TABLE comments (
-    id SERIAL PRIMARY KEY,
-    update_id INTEGER REFERENCES aspiration_updates(id),
-    user_id INTEGER REFERENCES users(id),
-    parent_id INTEGER REFERENCES comments(id),
-    content TEXT NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-```
-
-Then once you login to the app, add yourself as admin
+Then once you login to the app, add yourself as admin:
 
 ```sql
 INSERT INTO administrators (email, username)
@@ -111,12 +56,12 @@ FROM users
 WHERE email = 'user@example.com';
 ```
 
-### Development Environment
+### Development Setup
 
 1. Copy `.env.example` to create new `.env` file
 2. Update `.env` file with OAuth credentials
 3. Source `.env` with `source .env`
-4. Start server with `go run main.go`
+4. Start server with `make start`
 5. Navigate to http://localhost:8080
 
 ## License

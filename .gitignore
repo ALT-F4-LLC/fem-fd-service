@@ -1,4 +1,6 @@
 .go
+goals
+manifest.json
 
 # IDE-specific files
 .vscode/
