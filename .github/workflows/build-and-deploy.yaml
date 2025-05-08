@@ -1,0 +1,79 @@
+name: build-and-deploy
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: make build-image
+
+      - env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: make build-image-push
+
+  test:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: make build-image-pull
+
+      - run: make up
+
+      - env:
+          GOOSE_DBSTRING: postgresql://postgres:password@localhost:5432/postgres?sslmode=disable
+          GOOSE_DRIVER: postgres
+        run: make build-image-migrate
+
+      - if: always()
+        run: make down
+
+  deploy:
+    concurrency:
+      cancel-in-progress: false
+      group: deploy-lock
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+      AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    if: github.ref == 'refs/head/main' || github.ref == 'refs/head/prod'
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: make build-image-pull
+
+      - run: |
+          BUILD_TAG=staging
+
+          if [[ "${GITHUB_REF}" == "refs/heads/prod" ]]; then
+            BUILD_TAG=prod
+          fi
+
+          ECS_CLUSTER_NAME=${BUILD_TAG}
+          ECS_SERVICE_NAME=${ECS_CLUSTER_NAME}-service
+
+          echo "BUILD_TAG: ${BUILD_TAG}"
+          echo "ECS_CLUSTER_NAME: ${ECS_CLUSTER_NAME}"
+          echo "ECS_SERVICE_NAME: ${ECS_SERVICE_NAME}"
+
+          make BUILD_TAG=$BUILD_TAG build-image-promote
+          make ECS_CLUSTER_NAME=$ECS_CLUSTER_NAME ECS_SERVICE_NAME=$ECS_SERVICE_NAME deploy

@@ -1,0 +1,23 @@
+{
+  "Statement": [
+    {
+      "Action": ["ssm:GetParameters"],
+      "Effect": "Allow",
+      "Resource": ["arn:aws:ssm:us-west-2:677459762413:parameter/fem-fd-service/*"]
+    }
+  ],
+  "Version": "2012-10-17"
+}
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "tasks.apprunner.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}

@@ -1,0 +1,3 @@
+locals {
+  bastion_ingress = []
+}
