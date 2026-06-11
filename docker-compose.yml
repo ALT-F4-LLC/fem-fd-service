@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:alpine
+    image: postgres:17-alpine
     environment:
       POSTGRES_PASSWORD: password 
     network_mode: host
